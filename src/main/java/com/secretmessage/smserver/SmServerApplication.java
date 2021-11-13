@@ -36,7 +36,12 @@ public class SmServerApplication {
 			UserType.type.USER
 			)
 		);
+		print(String.valueOf(users.get(users.size())));
 		return new ResponseEntity<String>(users.get(0).username, HttpStatus.OK);
+	}
+
+	private void print(String out) {
+		System.out.println(out);
 	}
 
 
