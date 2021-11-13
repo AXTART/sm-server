@@ -1,16 +1,15 @@
 package com.secretmessage.smserver;
 
-import java.util.UUID;
-import java.util.Vector;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Instant;
+import java.util.Vector;
 
 
 @SpringBootApplication
@@ -22,17 +21,22 @@ public class SmServerApplication {
 	}
 
 	@GetMapping("/register")
-	public ResponseEntity<String> register(@RequestHeader("login") String login, @RequestHeader("pass") String pass) {
+	public ResponseEntity<String> register(
+			@RequestHeader("login") String login,
+			@RequestHeader("pass") String pass,
+			@RequestHeader("discriminator") String discriminator_res,
+			@RequestHeader("language") String language_res
+			) {
 		users.add(new User(
-			id = users.length()+1,
-			createdAt = 
-			discriminator
-			username
-			language
-			isDeveloper
-			user_type
-		))
-		return String.format(GetHash.token());
+			users.size()+1,
+			Instant.now().getEpochSecond(),
+			users.size()+1,
+			login,
+			language_res,
+			UserType.type.USER
+			)
+		);
+		return new ResponseEntity<String>(users.get(0).username, HttpStatus.OK);
 	}
 
 
