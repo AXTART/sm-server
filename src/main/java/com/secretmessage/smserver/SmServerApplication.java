@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
+import java.util.UUID;
 import java.util.Vector;
 
 
@@ -24,20 +25,20 @@ public class SmServerApplication {
 	public ResponseEntity<String> register(
 			@RequestHeader("login") String login,
 			@RequestHeader("pass") String pass,
-			@RequestHeader("discriminator") String discriminator_res,
 			@RequestHeader("language") String language_res
 			) {
+
 		users.add(new User(
 			users.size(),
 			Instant.now().getEpochSecond(),
-			users.size()+1,
 			login,
 			language_res,
-			UserType.type.USER
+			UserType.type.USER,
+			UUID.randomUUID()
 			)
 		);
 		print(users.get(users.size()-1).username);
-		return new ResponseEntity<String>(users.get(0).username, HttpStatus.OK);
+		return new ResponseEntity<String>(GetHash.token(users.get(users.size()-1).username, users.get(users.size()-1).id, users.get(users.size()-1).uuid.toString()), HttpStatus.OK);
 	}
 
 	private void print(String out) {
