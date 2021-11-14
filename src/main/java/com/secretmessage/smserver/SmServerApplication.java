@@ -28,7 +28,7 @@ public class SmServerApplication {
 			@RequestHeader("language") String language_res
 			) {
 		users.add(new User(
-			users.size()+1,
+			users.size(),
 			Instant.now().getEpochSecond(),
 			users.size()+1,
 			login,
@@ -36,7 +36,7 @@ public class SmServerApplication {
 			UserType.type.USER
 			)
 		);
-		print(String.valueOf(users.get(users.size())));
+		print(users.get(users.size()-1).username);
 		return new ResponseEntity<String>(users.get(0).username, HttpStatus.OK);
 	}
 
