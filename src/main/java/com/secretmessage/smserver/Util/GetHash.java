@@ -1,8 +1,8 @@
-package com.secretmessage.smserver;
+package com.secretmessage.smserver.Util;
 
 
 
-import org.apache.tomcat.util.buf.StringUtils;
+import com.secretmessage.smserver.Model.User;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -40,7 +40,7 @@ public class GetHash {
         return output;
     }
 
-    private static String sha256(String input){
+    public static String sha256(String input){
         MessageDigest digest = null;
         try {
             digest = MessageDigest.getInstance("SHA-256");
@@ -54,21 +54,16 @@ public class GetHash {
     }
 
     static String token(User user_to_hash) {
-
-            String username = user_to_hash.username;
-            long id = user_to_hash.id;
-            String uuid = user_to_hash.uuid.toString();
+            // TODO: Change method to ensure that tokens won't repeat and that they are secure
+            String username = user_to_hash.getUsername();
+            String uuid = user_to_hash.getUuid().toString();
 
             String user_hash = sha256(username);
-            String id_hash = sha256(String.valueOf(id));
             String uuid_hash = sha256(uuid);
             String token = "";
 
             token += separ(0,10,user_hash);
             token += separ(user_hash.length()-10,user_hash.length(),user_hash);
-
-            token += separ(0,10,id_hash);
-            token += separ(id_hash.length()-10,id_hash.length(),id_hash);
 
             token += separ(0,10,uuid_hash);
             token += separ(uuid_hash.length()-10,uuid_hash.length(),uuid_hash);

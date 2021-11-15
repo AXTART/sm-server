@@ -21,21 +21,6 @@ public class SmServerApplication {
 		SpringApplication.run(SmServerApplication.class, args);
 	}
 
-	@GetMapping("/register")
-	public ResponseEntity<String> register(
-			@RequestHeader("login") String login,
-			@RequestHeader("pass") String pass,
-			@RequestHeader("language") String language_res
-			) {
-				ResponseEntity<String> resp = RegisterRoute.run(login, pass, language_res);
-				return resp;
-			}
-
-	private void print(String out) {
-		System.out.println(out);
-	}
-
-
 }
 
 
