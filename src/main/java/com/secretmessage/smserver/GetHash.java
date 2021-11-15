@@ -53,7 +53,12 @@ public class GetHash {
         return bytesToHex(encodedhash);
     }
 
-    static String token(String username, long id, String uuid) {
+    static String token(User user_to_hash) {
+
+            String username = user_to_hash.username;
+            long id = user_to_hash.id;
+            String uuid = user_to_hash.uuid.toString();
+
             String user_hash = sha256(username);
             String id_hash = sha256(String.valueOf(id));
             String uuid_hash = sha256(uuid);

@@ -16,7 +16,7 @@ import java.util.Vector;
 @SpringBootApplication
 @RestController
 public class SmServerApplication {
-	Vector<User> users = new Vector<User>();
+	Vector<User> users;
 	public static void main(String[] args) {
 		SpringApplication.run(SmServerApplication.class, args);
 	}
@@ -27,18 +27,21 @@ public class SmServerApplication {
 			@RequestHeader("pass") String pass,
 			@RequestHeader("language") String language_res
 			) {
-
-		users.add(new User(
-			users.size(),
-			Instant.now().getEpochSecond(),
-			login,
-			language_res,
-			UserType.type.USER,
-			UUID.randomUUID()
-			)
+		User current_user = new User(
+				users.size(),
+				Instant.now().getEpochSecond(),
+				login,
+				language_res,
+				UserType.type.USER,
+				UUID.randomUUID()
 		);
+		users.add(current_user);
 		print(users.get(users.size()-1).username);
-		return new ResponseEntity<String>(GetHash.token(users.get(users.size()-1).username, users.get(users.size()-1).id, users.get(users.size()-1).uuid.toString()), HttpStatus.OK);
+		return new ResponseEntity<String>(
+				GetHash.token(
+						current_user
+				),
+				HttpStatus.OK);
 	}
 
 	private void print(String out) {
