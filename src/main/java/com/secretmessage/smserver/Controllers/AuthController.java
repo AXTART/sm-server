@@ -23,7 +23,7 @@ public class AuthController {
     ) {
         if (Constants.DATABASE.createUser(new User(
                 login,
-                GetHash.sha256(pass),
+                pass,
                 UUID.randomUUID()
         ))) {
             return new StatusResponse(ResponseStatus.SUCCESS);

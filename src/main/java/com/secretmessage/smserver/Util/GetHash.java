@@ -4,11 +4,25 @@ package com.secretmessage.smserver.Util;
 
 import com.secretmessage.smserver.Model.User;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 public class GetHash {
+
+    public static String randomHex(int numchars) {
+        Random r = new Random();
+        StringBuffer sb = new StringBuffer();
+        while(sb.length() < numchars){
+            sb.append(Integer.toHexString(r.nextInt()));
+        }
+
+        return sb.toString().substring(0, numchars);
+    }
+
     private static String bytesToHex(byte[] hash) {
         StringBuilder hexString = new StringBuilder(2 * hash.length);
         for (int i = 0; i < hash.length; i++) {
@@ -53,21 +67,22 @@ public class GetHash {
         return bytesToHex(encodedhash);
     }
 
-    static String token(User user_to_hash) {
-            // TODO: Change method to ensure that tokens won't repeat and that they are secure
-            String username = user_to_hash.getUsername();
-            String uuid = user_to_hash.getUuid().toString();
+    static public String hmacSha256(String secretKey, String message) {
+        byte[] hmacSha256 = null;
+        try {
+            Mac mac = Mac.getInstance("HmacSHA256");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+            mac.init(secretKeySpec);
+            hmacSha256 = mac.doFinal(message.getBytes(StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to calculate hmac-sha256", e);
+        }
+        return bytesToHex(hmacSha256);
+    }
 
-            String user_hash = sha256(username);
-            String uuid_hash = sha256(uuid);
-            String token = "";
-
-            token += separ(0,10,user_hash);
-            token += separ(user_hash.length()-10,user_hash.length(),user_hash);
-
-            token += separ(0,10,uuid_hash);
-            token += separ(uuid_hash.length()-10,uuid_hash.length(),uuid_hash);
-
-            return token;
+    static String token(User user) {
+            String L = sha256(user.getUuid() + user.getPassword());
+            String R = hmacSha256(user.getPassword(), L);
+            return L + "." + R;
     }
 }
