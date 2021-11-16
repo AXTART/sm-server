@@ -1,6 +1,6 @@
-package com.secretmessage.smserver.Model;
+package com.secretmessage.smserver.model;
 
-import com.secretmessage.smserver.Util.GetHash;
+import com.secretmessage.smserver.util.GetHash;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -42,7 +42,7 @@ public class User {
         return password;
     }
 
-    public UserType getUser_type() {
+    public UserType getUserType() {
         return userType;
     }
 
@@ -52,5 +52,19 @@ public class User {
 
     public String sha256(String text) {
         return GetHash.sha256(text + this.salt);
+    }
+    public String getToken() {
+        return GetHash.token(this);
+    }
+
+    public boolean verify(String password) {
+        return (getPassword().equals(sha256(password)));
+    }
+
+    public String userDescriptionString() {
+        return "Username: " + getUsername() +
+                "\nUUID: " + getUuid() +
+                "\nType: " + getUserType() +
+                "\nCreation Timestamp: " + getCreatedAt();
     }
 }

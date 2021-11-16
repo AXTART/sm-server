@@ -1,6 +1,6 @@
-package com.secretmessage.smserver.Response;
+package com.secretmessage.smserver.response;
 
-public class StatusResponse {
+public class StatusResponse implements Response {
 
     public ResponseStatus status;
 

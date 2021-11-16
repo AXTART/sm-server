@@ -1,8 +1,8 @@
-package com.secretmessage.smserver.Util;
+package com.secretmessage.smserver.util;
 
 
 
-import com.secretmessage.smserver.Model.User;
+import com.secretmessage.smserver.model.User;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -67,7 +67,7 @@ public class GetHash {
         return bytesToHex(encodedhash);
     }
 
-    static public String hmacSha256(String secretKey, String message) {
+    public static String hmacSha256(String secretKey, String message) {
         byte[] hmacSha256 = null;
         try {
             Mac mac = Mac.getInstance("HmacSHA256");
@@ -80,7 +80,7 @@ public class GetHash {
         return bytesToHex(hmacSha256);
     }
 
-    static String token(User user) {
+    public static String token(User user) {
             String L = sha256(user.getUuid() + user.getPassword());
             String R = hmacSha256(user.getPassword(), L);
             return L + "." + R;

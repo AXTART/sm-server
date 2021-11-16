@@ -1,4 +1,4 @@
-package com.secretmessage.smserver.Model;
+package com.secretmessage.smserver.model;
 
 public enum UserType {
     DEVELOPER,
