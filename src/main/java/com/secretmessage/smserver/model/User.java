@@ -12,22 +12,25 @@ public class User {
     private UserType userType;
     private UUID uuid;
     private String salt;
+    private String email;
 
-    public User(String username, String password, UUID uuid) {
+    public User(String username, String password, UUID uuid, String email) {
         this.salt = GetHash.randomHex(20);
         this.createdAt = Instant.now().getEpochSecond();
         this.username = username;
         this.password = sha256(password);
         this.userType = UserType.USER;
         this.uuid = uuid;
+        this.email = email;
     }
-    public User(long createdAt, String username, String password, UserType userType, UUID uuid){
+    public User(long createdAt, String username, String password, UserType userType, UUID uuid, String email){
         this.salt = GetHash.randomHex(20);
         this.createdAt = createdAt;
         this.username = username;
         this.password = sha256(password);
         this.userType = userType;
         this.uuid = uuid;
+        this.email = email;
     }
 
     public long getCreatedAt() {
@@ -50,6 +53,10 @@ public class User {
         return uuid;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     public String sha256(String text) {
         return GetHash.sha256(text + this.salt);
     }
@@ -63,6 +70,7 @@ public class User {
 
     public String userDescriptionString() {
         return "Username: " + getUsername() +
+                "\nEmail: " + getEmail() +
                 "\nUUID: " + getUuid() +
                 "\nType: " + getUserType() +
                 "\nCreation Timestamp: " + getCreatedAt();

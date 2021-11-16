@@ -23,13 +23,15 @@ public class AuthController {
     @PostMapping(value = "/register", produces = "application/json")
     public ResponseEntity<Response> register(
             @RequestHeader("login") String login,
-            @RequestHeader("pass") String pass
+            @RequestHeader("pass") String pass,
+            @RequestHeader("email") String email
     ) {
         // create user
         User user = new User(
                 login,
                 pass,
-                UUID.randomUUID()
+                UUID.randomUUID(),
+                email
         );
         // add it to database and return a response
         if (Constants.DATABASE.createUser(user)) {
@@ -40,12 +42,12 @@ public class AuthController {
 
     @PostMapping(value = "/login", produces = "application/json")
     public ResponseEntity<Response> login(
-            @RequestHeader("login") String login,
+            @RequestHeader("email") String email,
             @RequestHeader("pass") String pass
     ) {
         // get user
-       User u = Constants.DATABASE.getUser(login);
-       if (u == null) return new ResponseEntity<>(new StatusResponse(ResponseStatus.FAIL), HttpStatus.BAD_REQUEST);
+       User u = Constants.DATABASE.getUser(email);
+       if (u == null) return new ResponseEntity<>(new StatusResponse(ResponseStatus.FAIL), HttpStatus.UNAUTHORIZED);
 
        // verify user
        if (u.verify(pass)) {
@@ -58,5 +60,4 @@ public class AuthController {
        }
     }
 
-    // TODO: add login method and return some kind of token for a user
 }
