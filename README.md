@@ -13,3 +13,4 @@ If you want to make a pull request, your code must meet these rules:
 - Code must be secure
 - Code must be useful without strange or not working code
 - Code must not contain any kind of advertisements
+- For new endpoints/features code must include unit tests
